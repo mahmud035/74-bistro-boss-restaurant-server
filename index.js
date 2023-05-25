@@ -27,9 +27,11 @@ dbConnect();
 
 //* Create Database Collection
 const Menu = client.db('bistroBossDB').collection('menu');
+const Review = client.db('bistroBossDB').collection('review');
 
 // ============ API ENDPOINTS ============
 //* GET
+// get menu data
 app.get('/menu', async (req, res) => {
   try {
     const menu = await Menu.find({}).toArray();
@@ -42,6 +44,26 @@ app.get('/menu', async (req, res) => {
       });
     } else {
       res.send({ success: false, message: `Didn't found menu data` });
+    }
+  } catch (error) {
+    console.log(error.name.bgRed, error.message.bold, error.stack);
+  }
+});
+
+//* GET
+// get review data
+app.get('/review', async (req, res) => {
+  try {
+    const review = await Review.find({}).toArray();
+
+    if (review.length) {
+      res.send({
+        success: true,
+        message: 'Review data found',
+        data: review,
+      });
+    } else {
+      res.send({ success: false, message: `Didn't found review data` });
     }
   } catch (error) {
     console.log(error.name.bgRed, error.message.bold, error.stack);

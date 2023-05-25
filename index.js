@@ -25,6 +25,53 @@ const dbConnect = async () => {
 };
 dbConnect();
 
+//* Create Database Collection
+const Menu = client.db('bistroBossDB').collection('menu');
+
+// ============ API ENDPOINTS ============
+//* GET
+app.get('/menu', async (req, res) => {
+  try {
+    const menu = await Menu.find({}).toArray();
+
+    if (menu.length) {
+      res.send({
+        success: true,
+        message: 'Menu data found',
+        data: menu,
+      });
+    } else {
+      res.send({ success: false, message: `Didn't found menu data` });
+    }
+  } catch (error) {
+    console.log(error.name.bgRed, error.message.bold, error.stack);
+  }
+});
+
+//* POST
+app.post('/menu', async (req, res) => {
+  try {
+    console.log('api hit');
+    const menu = req.body;
+    const result = await Menu.insertOne(menu);
+
+    if (result.insertedId) {
+      res.send({
+        success: true,
+        message: 'Menu added successfully',
+      });
+    } else {
+      res.send({ success: false, message: `Sorry couldn't added the menu` });
+    }
+  } catch (error) {
+    console.log(error.name.bgRed, error.message.bold, error.stack);
+  }
+});
+
+//* PUT / PATCH
+
+//* DELETE
+
 app.listen(port, () => {
   console.log(`Server Up and Running`.yellow.italic);
 });

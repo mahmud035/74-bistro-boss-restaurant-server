@@ -73,6 +73,25 @@ app.get('/review', async (req, res) => {
   }
 });
 
+// get specific user's order items
+app.get('/cart', async (req, res) => {
+  try {
+    const { email } = req.query;
+    const cart = await Cart.find({ email: email }).toArray();
+
+    if (cart.length > 0) {
+      res.send(cart);
+    } else {
+      res.send({
+        success: false,
+        message: `Didn't found order items`,
+      });
+    }
+  } catch (error) {
+    console.log(error.name.bgRed, error.message.bold, error.stack);
+  }
+});
+
 //* POST
 app.post('/menu', async (req, res) => {
   try {

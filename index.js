@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const { MongoClient } = require('mongodb');
 const app = express();
 require('colors');
@@ -10,6 +11,7 @@ const port = process.env.PORT || 5000;
 //* Middleware
 app.use(cors());
 app.use(express.json());
+app.use(morgan('dev'));
 
 //* Database Connection
 const uri = process.env.URI;

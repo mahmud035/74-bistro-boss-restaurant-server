@@ -34,7 +34,7 @@ const Cart = client.db('bistroBossDB').collection('cart');
 
 // ============ API ENDPOINTS ============
 //* GET
-// get menu data
+// get menus data
 app.get('/menu', async (req, res) => {
   try {
     const menu = await Menu.find({}).toArray();
@@ -54,7 +54,7 @@ app.get('/menu', async (req, res) => {
 });
 
 //* GET
-// get review data
+// get reviews data
 app.get('/review', async (req, res) => {
   try {
     const review = await Review.find({}).toArray();
@@ -76,7 +76,6 @@ app.get('/review', async (req, res) => {
 //* POST
 app.post('/menu', async (req, res) => {
   try {
-    console.log('api hit');
     const menu = req.body;
     const result = await Menu.insertOne(menu);
 
@@ -87,6 +86,28 @@ app.post('/menu', async (req, res) => {
       });
     } else {
       res.send({ success: false, message: `Sorry couldn't added the menu` });
+    }
+  } catch (error) {
+    console.log(error.name.bgRed, error.message.bold, error.stack);
+  }
+});
+
+// add single item to Cart collection
+app.post('/cart', async (req, res) => {
+  try {
+    const item = req.body;
+    const result = await Cart.insertOne(item);
+
+    if (result.insertedId) {
+      res.send({
+        success: true,
+        message: 'Item added to cart successfully',
+      });
+    } else {
+      res.send({
+        success: false,
+        message: `Couldn't add the item to cart`,
+      });
     }
   } catch (error) {
     console.log(error.name.bgRed, error.message.bold, error.stack);

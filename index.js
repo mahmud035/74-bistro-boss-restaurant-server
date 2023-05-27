@@ -30,6 +30,7 @@ dbConnect();
 //* Create Database Collection
 const Menu = client.db('bistroBossDB').collection('menu');
 const Review = client.db('bistroBossDB').collection('review');
+const Cart = client.db('bistroBossDB').collection('cart');
 
 // ============ API ENDPOINTS ============
 //* GET
@@ -99,3 +100,15 @@ app.post('/menu', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server Up and Running`.yellow.italic);
 });
+
+/**
+ ** IMP: API Naming Convention
+
+ * app.get('/uses')
+ * app.get('/users/:id')
+ * app.post('/uses')
+ * app.put('/users/:id')
+ * app.patch('/users/:id')
+ * app.delete('/users/:id')
+ *
+ *  */

@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const app = express();
 require('colors');
 require('dotenv').config();
@@ -136,6 +136,27 @@ app.post('/cart', async (req, res) => {
 //* PUT / PATCH
 
 //* DELETE
+app.delete('/cart/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const query = { _id: new ObjectId(id) };
+    const result = await Cart.deleteOne(query);
+
+    if (result.deletedCount) {
+      res.send({
+        success: true,
+        message: 'Food item deleted successfully',
+      });
+    } else {
+      res.send({
+        success: false,
+        message: `Sorry! something went wrong`,
+      });
+    }
+  } catch (error) {
+    console.log(error.name.bgRed, error.message.bold, error.stack);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server Up and Running`.yellow.italic);

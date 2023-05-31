@@ -31,6 +31,7 @@ dbConnect();
 const Menu = client.db('bistroBossDB').collection('menu');
 const Review = client.db('bistroBossDB').collection('review');
 const Cart = client.db('bistroBossDB').collection('cart');
+const User = client.db('bistroBossDB').collection('users');
 
 // ============ API ENDPOINTS ============
 //* GET
@@ -134,6 +135,34 @@ app.post('/cart', async (req, res) => {
 });
 
 //* PUT / PATCH
+// save user email and role in DB
+app.put('/users/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = req.body;
+    const filter = { email: email };
+    const options = { upsert: true };
+    const updatedUser = {
+      $set: user,
+    };
+    const result = await User.updateOne(filter, updatedUser, options);
+
+    if (result.modifiedCount) {
+      res.status(200).send({
+        success: true,
+        message: 'Updated user info',
+        data: result,
+      });
+    } else {
+      res.status(400).send({
+        success: false,
+        message: 'Failed to update user info',
+      });
+    }
+  } catch (error) {
+    console.log(error.name.bgRed, error.message.bold, error.stack);
+  }
+});
 
 //* DELETE
 app.delete('/cart/:id', async (req, res) => {
